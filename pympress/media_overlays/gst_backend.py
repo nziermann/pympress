@@ -35,7 +35,7 @@ gi.require_version('GstPlayer', '1.0')
 from gi.repository import GLib, Gst, GstPlayer
 
 
-from pympress.util import IS_WINDOWS
+from pympress.util import IS_WINDOWS, IS_MAC_OS
 from pympress.media_overlays import base
 
 
@@ -117,9 +117,9 @@ class GstOverlay(base.VideoOverlay):
         if self.renderer.get_window_handle():
             pass
         elif IS_WINDOWS:
-            # TODO test in windows
-            # get_property('window')
             self.renderer.set_window_handle(base.get_window_handle(self.movie_zone.get_window()))
+        elif IS_MAC_OS:
+            self.renderer.set_window_handle(base.get_window_nsview(self.movie_zone.get_window()))
         else:
             self.renderer.set_window_handle(self.movie_zone.get_window().get_xid())
 
