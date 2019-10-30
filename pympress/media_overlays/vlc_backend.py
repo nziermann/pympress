@@ -35,7 +35,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import GLib
 
-from pympress.util import IS_WINDOWS
+from pympress.util import IS_WINDOWS, IS_MAC_OS
 from pympress.media_overlays import base
 
 
@@ -67,7 +67,9 @@ class VlcOverlay(base.VideoOverlay):
         # Do we need to be on the main thread? (especially for the mess from the win32 window handle)
         # assert(isinstance(threading.current_thread(), threading._MainThread))
         if IS_WINDOWS:
-            self.player.set_hwnd(base.get_window_handle(self.movie_zone.get_window()))  # get_property('window')
+            self.player.set_hwnd(base.get_window_handle(self.movie_zone.get_window()))
+        elif IS_MAC_OS:
+            self.player.set_nsobject(base.get_window_nsview(self.movie_zone.get_window()))
         else:
             self.player.set_xwindow(self.movie_zone.get_window().get_xid())
         return False
