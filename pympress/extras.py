@@ -166,31 +166,19 @@ class Annotations(object):
         annotations (`list`): A list of strings, that are the annotations to be displayed
     """
     #: The containing widget for the annotations
-    scrollable_treelist = None
-    #: Making the annotations list scroll if it's too long
-    scrolled_window = None
-    #: :class:`~Gtk.CellRendererText` Text renderer for the annotations
-    annotation_renderer = None
+    textview = None
 
     def __init__(self, builder):
         super(Annotations, self).__init__()
         builder.load_widgets(self)
 
-        self.scrolled_window.set_hexpand(True)
-
 
     def add_annotations(self, annotations):
         """ Add annotations to be displayed (typically on going to a new slide).
         """
-        prev_annots = self.scrollable_treelist.get_model()
-        if prev_annots:
-            prev_annots.clear()
-        list_annot = Gtk.ListStore(str)
-
-        for annot in annotations:
-            list_annot.append(('● ' + annot,))
-
-        self.scrollable_treelist.set_model(list_annot)
+        self.textbuffer = self.textview.get_buffer()
+        text = '\n'.join(annotations)
+        self.textbuffer.set_text( text)
 
 
     def on_configure_annot(self, widget, event):
@@ -200,10 +188,7 @@ class Annotations(object):
             widget (:class:`~Gtk.Widget`):  the widget which was resized.
             event (:class:`~Gdk.Event`):  the GTK event.
         """
-        self.annotation_renderer.props.wrap_width = max(30, widget.get_allocated_width() - 10)
-        self.scrolled_window.queue_resize()
-        self.scrollable_treelist.get_column(0).queue_resize()
-
+        pass
 
     def on_scroll(self, widget, event):
         """ Try scrolling the annotations window.
@@ -215,15 +200,7 @@ class Annotations(object):
         Returns:
             `bool`: whether the event was consumed
         """
-        adj = self.scrolled_window.get_vadjustment()
-        if event.direction == Gdk.ScrollDirection.UP:
-            adj.set_value(adj.get_value() - adj.get_step_increment())
-        elif event.direction == Gdk.ScrollDirection.DOWN:
-            adj.set_value(adj.get_value() + adj.get_step_increment())
-        else:
-            return False
-        return True
-
+        pass
 
 class Media(object):
     """ Class managing statically the medias and media player backends, to enable play/pause callbacks.
