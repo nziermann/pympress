@@ -567,7 +567,7 @@ class Page(object):
         """
         pw, ph = self.get_size(dtype)
 
-        cr.set_source_rgb(1, 1, 1)
+        cr.set_source_rgba(1, 1, 1, 1)
 
         # Scale
         scale = min(ww / pw, wh / ph)

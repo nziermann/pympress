@@ -294,7 +294,7 @@ class SurfaceCache(object):
 
         # Render to a ImageSurface
         try:
-            surface = self.surface_factory[widget_name](cairo.CONTENT_COLOR, ww, wh)
+            surface = self.surface_factory[widget_name](cairo.CONTENT_COLOR_ALPHA, ww, wh)
         except AttributeError:
             logger.warning('Widget {} was not mapped when rendering'.format(widget_name), exc_info = True)
             return False
